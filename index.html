@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Decorator & Planner | Making Moments Memorable</title>
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary-color: #d4af37; /* Gold */
+            --secondary-color: #333; /* Dark Grey */
+            --bg-light: #f9f9f9;
+            --accent-pink: #ffe4e1;
+            --accent-blue: #e0f7fa;
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: var(--secondary-color);
+        }
+
+        /* Navigation */
+        header {
+            background: white;
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #b5952f;
+        }
+
+        /* Sections General */
+        section {
+            padding: 4rem 5%;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--secondary-color);
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-img {
+            height: 200px;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-content h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        /* Specific Service Backgrounds (Placeholders) */
+        .bg-baby { background-image: url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); }
+        .bg-shop { background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); }
+        .bg-welcome { background-image: url('https://images.unsplash.com/photo-1519689680058-324335c77eba?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); }
+        .bg-more { background-image: url('https://images.unsplash.com/photo-1464366400600-7168b8af0bc3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); }
+
+        /* Why Choose Us */
+        .why-us {
+            background-color: var(--bg-light);
+            text-align: center;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .feature-item {
+            margin: 20px;
+            max-width: 300px;
+        }
+
+        /* Contact Form */
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4rem;
+        }
+
+        .contact-info, .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            nav ul { display: none; } /* Simplified for this demo */
+            .logo { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Event Decorator & Planner</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <h1>Transforming Spaces, Creating Memories</h1>
+        <p>Expert decoration and planning for Baby Showers, Shop Openings, Welcome Baby events, and much more.</p>
+        <a href="#contact" class="btn">Book Your Date</a>
+    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <p>We are a dedicated team of professional decorators and event planners passionate about celebrating life's biggest moments. From the intimacy of a Welcome Baby ceremony to the grandeur of a new Shop Opening, we handle every detail with precision and flair.</p>
+            <br>
+            <p><strong>Our Philosophy:</strong> Every event tells a story. Let us help you tell yours beautifully.</p>
+        </div>
+    </section>
+
+    <section id="services" style="background-color: var(--bg-light);">
+        <h2>Our Services</h2>
+        <div class="services-grid">
+            
+            <div class="service-card">
+                <div class="card-img bg-baby"></div>
+                <div class="card-content">
+                    <h3>Baby Shower</h3>
+                    <p>Whimsical balloons, elegant backdrops, and themed decor to celebrate the mom-to-be.</p>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="card-img bg-shop"></div>
+                <div class="card-content">
+                    <h3>Shop Opening</h3>
+                    <p>Grand entrance decorations, ribbon cuttings, and professional setups to launch your business in style.</p>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="card-img bg-welcome"></div>
+                <div class="card-content">
+                    <h3>Welcome Baby</h3>
+                    <p>Cozy and heartwarming home decor to welcome the newest member of your family.</p>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="card-img bg-more"></div>
+                <div class="card-content">
+                    <h3>& Many More</h3>
+                    <p>Birthdays, Anniversary celebrations, corporate events, and custom requests.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="why-us">
+        <h2>Why Choose Us?</h2>
+        <div class="features">
+            <div class="feature-item">
+                <h3>🎈 Creative Designs</h3>
+                <p>Unique themes tailored to your vision.</p>
+            </div>
+            <div class="feature-item">
+                <h3>💰 Budget Friendly</h3>
+                <p>Packages that fit your financial needs.</p>
+            </div>
+            <div class="feature-item">
+                <h3>✅ Professional Team</h3>
+                <p>Timely execution and stress-free planning.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Get a Quote</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Contact Details</h3>
+                <p><strong>Phone:</strong> +91 98765 43210</p>
+                <p><strong>Email:</strong> info@eventdecorator.com</p>
+                <p><strong>Location:</strong> [Your City Name Here]</p>
+                <br>
+                <p>Ready to plan your event? Fill out the form or give us a call!</p>
+            </div>
+            <div class="contact-form">
+                <form>
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="tel" placeholder="Phone Number" required>
+                    <input type="text" placeholder="Event Type (e.g., Baby Shower)" required>
+                    <textarea rows="5" placeholder="Tell us about your requirements..."></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Event Decorator & Planner. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
